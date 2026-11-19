@@ -1,0 +1,115 @@
+/* Estilos globales para Erasmus Valley: Salerno Edition */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background-color: #05060a;
+  font-family: 'Segoe UI', -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+  color: #ffffff;
+  touch-action: none;
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Contenedor principal de Phaser */
+#game-container {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  overflow: hidden;
+  background-color: #05060a;
+}
+
+canvas {
+  display: block;
+  image-rendering: -moz-crisp-edges;
+  image-rendering: -webkit-crisp-edges;
+  image-rendering: pixelated;
+  image-rendering: crisp-edges;
+}
+
+/* Pantalla superpuesta para orientación vertical (móviles y tablets) */
+.orientation-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: radial-gradient(circle at center, #1e1533 0%, #0a0c16 85%);
+  z-index: 99999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 24px;
+  pointer-events: all;
+  opacity: 1;
+  visibility: visible;
+  transition: opacity 0.3s ease, visibility 0.3s ease;
+}
+
+.orientation-overlay.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+
+.orientation-card {
+  max-width: 380px;
+  width: 100%;
+  background-color: rgba(13, 15, 24, 0.95);
+  border: 2px solid #575fcf;
+  border-radius: 16px;
+  padding: 32px 24px;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.7), 0 0 24px rgba(87, 95, 207, 0.25);
+}
+
+.phone-rotate-icon {
+  margin-bottom: 20px;
+  display: inline-block;
+}
+
+/* Animación de rotación del teléfono */
+@keyframes rotate-device-phone {
+  0%, 15% {
+    transform: rotate(0deg);
+  }
+  45%, 70% {
+    transform: rotate(-90deg);
+  }
+  90%, 100% {
+    transform: rotate(0deg);
+  }
+}
+
+.phone-rotate-icon svg {
+  animation: rotate-device-phone 2.6s ease-in-out infinite;
+  filter: drop-shadow(0 4px 10px rgba(11, 232, 129, 0.3));
+}
+
+.orientation-title {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 24px;
+  font-weight: bold;
+  color: #ffdd59;
+  margin-bottom: 12px;
+  letter-spacing: 1px;
+}
+
+.orientation-subtitle {
+  font-size: 15px;
+  line-height: 1.5;
+  color: #d2dae2;
+}

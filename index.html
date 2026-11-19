@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <title>Erasmus Valley: Salerno Edition</title>
+  <link rel="stylesheet" href="./src/styles/main.css" />
+</head>
+<body>
+  <!-- Contenedor del juego Phaser -->
+  <div id="game-container"></div>
+
+  <!-- Pantalla superpuesta para orientación vertical en móviles y tablets -->
+  <div id="rotate-device-overlay" class="orientation-overlay hidden" aria-live="assertive">
+    <div class="orientation-card">
+      <div class="phone-rotate-icon">
+        <svg width="68" height="68" viewBox="0 0 68 68" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <!-- Dispositivo móvil en rotación -->
+          <rect class="phone-body" x="20" y="12" width="28" height="44" rx="5" stroke="#ffdd59" stroke-width="3" fill="#1e1533"/>
+          <line x1="30" y1="50" x2="38" y2="50" stroke="#ffdd59" stroke-width="3" stroke-linecap="round"/>
+          <circle cx="34" cy="18" r="1.5" fill="#ffdd59"/>
+          <!-- Flechas de giro animadas -->
+          <path d="M52 26C56 30 56 38 52 42" stroke="#0be881" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M56 40L52 43L49 39" stroke="#0be881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+          <path d="M16 42C12 38 12 30 16 26" stroke="#0be881" stroke-width="2.5" stroke-linecap="round"/>
+          <path d="M12 28L16 25L19 29" stroke="#0be881" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+        </svg>
+      </div>
+      <h1 class="orientation-title">¡Gira tu dispositivo!</h1>
+      <p class="orientation-subtitle">
+        Erasmus Valley se juega en horizontal.<br />
+        Gira la pantalla para continuar tu aventura.
+      </p>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+</body>
+</html>

@@ -29,6 +29,7 @@ El objetivo es crear una experiencia entretenida y personalizada, con cierta dif
 | Distribución | Navegador web mediante GitHub Pages |
 | Final | Abierto, con regreso temporal por Navidad |
 | Idioma | Español |
+| Orientación | Exclusivamente horizontal (landscape) |
 
 ## 1.2. Objetivos de diseño
 
@@ -428,11 +429,56 @@ Se implementarán controles táctiles:
 
 Los controles deberán adaptarse al tamaño y orientación de pantalla.
 
-El juego deberá ser funcional tanto en orientación horizontal como vertical, aunque podrá recomendarse la horizontal cuando ofrezca una mejor experiencia.
-
 No se deberá depender de acciones exclusivas de ratón, como pasar el cursor sobre un elemento.
 
-## 6.4. Menú principal
+## 6.4. Orientación y adaptación de pantalla
+
+El videojuego estará diseñado exclusivamente para jugar en **orientación horizontal (landscape)**.
+
+La resolución y la relación de aspecto no serán fijas. El juego deberá adaptarse dinámicamente a las dimensiones disponibles de cada dispositivo.
+
+### Comportamiento
+
+- **Ordenadores:** el escenario y la interfaz se adaptarán al tamaño de la ventana, manteniendo una distribución horizontal.
+- **Móviles y tablets en horizontal:** el videojuego aprovechará el espacio disponible, adaptando la cámara, los controles y la interfaz.
+- **Móviles y tablets en vertical:** se mostrará una pantalla solicitando girar el dispositivo y se pausará la partida.
+
+### Adaptación de escenarios
+
+- El tamaño del canvas se ajustará al espacio disponible.
+- La cámara se adaptará a las dimensiones de la pantalla.
+- Los personajes y objetos mantendrán proporciones coherentes.
+- Podrá variar la superficie visible del escenario según el dispositivo.
+- Los elementos importantes no deberán quedar recortados ni ocultos.
+- Se evitarán deformaciones y escalados que perjudiquen la estética pixel art.
+
+### Adaptación de la interfaz
+
+- El joystick y los botones táctiles se colocarán según las dimensiones de la pantalla.
+- La barra de salud mental y los objetivos permanecerán visibles.
+- Los diálogos y menús se adaptarán al espacio disponible.
+- Los controles deberán mantener un tamaño suficientemente cómodo para su uso táctil.
+
+### Orientación vertical
+
+Cuando el dispositivo esté en vertical, aparecerá el mensaje:
+
+**¡Gira tu dispositivo!**
+
+*Erasmus Valley se juega en horizontal. Gira la pantalla para continuar tu aventura.*
+
+Mientras aparezca el aviso:
+
+- El juego permanecerá pausado.
+- No se podrán realizar acciones.
+- No avanzarán los temporizadores de las pruebas.
+- No se perderá salud mental ni progreso.
+
+Al regresar a horizontal, la partida continuará automáticamente desde el mismo punto.
+
+El cambio de orientación deberá detectarse sin recargar la página.
+
+## 6.5. Menú principal
 
 El menú principal incluirá:
 
@@ -1665,14 +1711,27 @@ El juego deberá seguir siendo jugable en dispositivos móviles de rendimiento m
 
 ## 16.2. Compatibilidad
 
-Se deberá comprobar el funcionamiento en:
+El videojuego deberá funcionar en:
 
 - Google Chrome.
 - Safari.
 - Firefox.
 - Navegadores móviles compatibles.
 
+La experiencia de juego estará diseñada exclusivamente para orientación horizontal.
+
+En móviles y tablets se comprobará:
+
+- Funcionamiento correcto en horizontal.
+- Aparición del aviso de rotación en vertical.
+- Pausa de la partida mientras el dispositivo esté en vertical.
+- Recuperación correcta al regresar a horizontal.
+- Correcta distribución del joystick, botones e interfaz.
+- Ausencia de elementos recortados o fuera de pantalla.
+
 Se prestará especial atención a Safari en iPhone y iPad.
+
+En ordenadores, el juego deberá conservar una disposición horizontal incluso cuando la ventana tenga proporciones verticales.
 
 ## 16.3. Guardado
 
