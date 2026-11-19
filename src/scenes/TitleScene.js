@@ -2,8 +2,7 @@ import Phaser from 'phaser';
 
 /**
  * Pantalla inicial del juego (TitleScene).
- * Se adapta de forma fluida a la pantalla en cualquier dispositivo,
- * manteniendo una composición y experiencia exclusivamente horizontal (landscape).
+ * Presenta el videojuego y permite acceder directamente al prototipo de exploración.
  */
 export default class TitleScene extends Phaser.Scene {
   constructor() {
@@ -53,18 +52,21 @@ export default class TitleScene extends Phaser.Scene {
       align: 'center'
     }).setOrigin(0.5);
 
-    this.promptText = this.add.text(0, 0, '▶ Haz clic o toca la pantalla para interactuar ◀', {
+    // Botón / aviso interactivo para iniciar la exploración
+    this.promptText = this.add.text(0, 0, '▶ Iniciar Exploración con Amy (Haz clic o toca) ◀', {
       fontFamily: 'sans-serif',
       fontSize: '16px',
       fontStyle: 'bold',
       color: '#0be881',
+      backgroundColor: 'rgba(5, 10, 20, 0.7)',
+      padding: { x: 16, y: 10 },
       align: 'center'
-    }).setOrigin(0.5);
+    }).setOrigin(0.5).setInteractive({ cursor: 'pointer' });
 
     // Animación de pulso para el aviso
     this.tweens.add({
       targets: this.promptText,
-      alpha: { from: 1, to: 0.35 },
+      alpha: { from: 1, to: 0.4 },
       duration: 800,
       yoyo: true,
       repeat: -1,
@@ -78,7 +80,7 @@ export default class TitleScene extends Phaser.Scene {
       align: 'center'
     }).setOrigin(0.5);
 
-    this.versionText = this.add.text(0, 0, 'v0.1.0 • Fase 1: Adaptable y horizontal (Landscape)', {
+    this.versionText = this.add.text(0, 0, 'v0.2.1 • Fase 2.1: Prototipo de Movimiento y Exploración', {
       fontFamily: 'sans-serif',
       fontSize: '12px',
       color: '#808e9b',
@@ -91,9 +93,10 @@ export default class TitleScene extends Phaser.Scene {
     // Escuchar cambios de redimensionado de pantalla
     this.scale.on('resize', this.handleResize, this);
 
-    // Detección de interacción
-    this.input.on('pointerdown', () => this.handleUserInteraction());
-    this.input.keyboard?.on('keydown', () => this.handleUserInteraction());
+    // Al interactuar con el botón o pulsar espacio/enter, arrancar la exploración
+    this.promptText.on('pointerdown', () => this.startExploration());
+    this.input.keyboard?.on('keydown-SPACE', () => this.startExploration());
+    this.input.keyboard?.on('keydown-ENTER', () => this.startExploration());
 
     this.events.on('shutdown', () => {
       this.scale.off('resize', this.handleResize, this);
@@ -134,10 +137,8 @@ export default class TitleScene extends Phaser.Scene {
   layoutElements(width, height) {
     this.drawBackground(width, height);
 
-    // Escala armónica basada en la altura y anchura del área visible horizontal
     const scale = Phaser.Math.Clamp(Math.min(width / 960, height / 540), 0.6, 1.4);
 
-    // Ajustar tamaños de fuente proporcionalmente
     this.titleText.setFontSize(`${Math.round(44 * scale)}px`);
     this.subtitleText.setFontSize(`${Math.round(22 * scale)}px`);
     this.taglineText.setFontSize(`${Math.round(15 * scale)}px`);
@@ -148,12 +149,11 @@ export default class TitleScene extends Phaser.Scene {
     const centerX = width / 2;
     const centerY = height / 2;
 
-    // Posicionamiento vertical centrado y proporcionado
     this.titleText.setPosition(centerX, centerY - 95 * scale);
     this.subtitleText.setPosition(centerX, centerY - 35 * scale);
     this.taglineText.setPosition(centerX, centerY + 20 * scale);
-    this.promptText.setPosition(centerX, centerY + 85 * scale);
-    this.statusText.setPosition(centerX, centerY + 135 * scale);
+    this.promptText.setPosition(centerX, centerY + 90 * scale);
+    this.statusText.setPosition(centerX, centerY + 145 * scale);
     this.versionText.setPosition(centerX, height - 20);
   }
 
@@ -161,17 +161,15 @@ export default class TitleScene extends Phaser.Scene {
     this.layoutElements(gameSize.width, gameSize.height);
   }
 
-  handleUserInteraction() {
-    if (!this.hasInteracted) {
-      this.hasInteracted = true;
-      this.statusText.setText('✓ Audio y motor gráfico listos (Adaptable y 100% horizontal)');
-      this.playChimeSound();
-    }
+  startExploration() {
+    this.playChimeSound();
+    // Transición suave a la escena del mundo de exploración
+    this.cameras.main.fadeOut(250, 10, 12, 22);
+    this.cameras.main.once('camerafadeoutcomplete', () => {
+      this.scene.start('WorldScene');
+    });
   }
 
-  /**
-   * Reproduce un acorde sintetizado procedural mediante Web Audio API
-   */
   playChimeSound() {
     try {
       const audioCtx = this.sound?.context || new (window.AudioContext || window.webkitAudioContext)();
