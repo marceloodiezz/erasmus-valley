@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1, viewport-fit=cover">
+
+    <title>Erasmus Valley: Salerno Edition</title>
+
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <main id="game-container"></main>
+
+    <!-- Menú principal -->
+    <section id="main-menu">
+        <div class="menu-content">
+
+            <div class="game-title">
+                <h1>ERASMUS VALLEY</h1>
+                <h2>SALERNO EDITION</h2>
+                <p>Cinco aventuras. Un Erasmus. Demasiados problemas.</p>
+            </div>
+
+            <nav class="menu-buttons">
+                <button id="new-game" class="game-button">
+                    Nueva partida
+                </button>
+
+                <button id="continue-game" class="game-button" disabled>
+                    Continuar
+                </button>
+            </nav>
+
+            <span class="menu-footer">Hecho con cariño (y algo de sufrimiento)</span>
+
+        </div>
+    </section>
+
+    <!-- Botón temporal para volver al menú -->
+    <button id="back-menu" class="game-button hidden">
+        Volver al menú
+    </button>
+
+    <!-- Cuadro de diálogo -->
+    <div id="dialog-overlay" class="hidden">
+        <div class="dialog-box">
+            <h3 id="dialog-speaker">Narrador</h3>
+            <p id="dialog-text"></p>
+
+            <!-- Opciones de respuesta -->
+            <div id="dialog-choices" class="hidden"></div>
+
+            <button id="dialog-close" type="button">
+                Continuar
+            </button>
+        </div>
+    </div>
+
+    <!-- Aviso de orientación -->
+    <div id="rotate-message">
+        <h1>¡Gira tu dispositivo!</h1>
+        <p>Erasmus Valley se juega en horizontal.</p>
+    </div>
+
+    <!-- Motor del videojuego -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/phaser/3.90.0/phaser.min.js"></script>
+
+    <!-- Personajes -->
+    <script src="js/entities/Player.js"></script>
+
+    <!-- Sistemas -->
+    <script src="js/systems/DialogManager.js"></script>
+    <script src="js/systems/SaveManager.js"></script>
+
+    <!-- Escenarios -->
+    <script src="js/scenes/RoomScene.js"></script>
+
+    <!-- Configuración principal -->
+    <script src="js/main.js"></script>
+
+</body>
+</html>
