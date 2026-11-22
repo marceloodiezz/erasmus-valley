@@ -4,19 +4,25 @@
 
 **Una aventura narrativa 2D sobre sobrevivir a la universidad, hacer amigos, viajar y conseguir volver a casa por Navidad.**
 
-*Un pequeño videojuego creado como regalo de amigo invisible para Amy.*
-
-</div>
+*Un pequeño videojuego creado como regalo de amigo invisible para Amanda.*
 
 ---
 
-## 🇮🇹 Bienvenida a Salerno, Amy
+### 🎮 [¡Juega a Erasmus Valley!](https://marceloodiezz.github.io/erasmus-valley/)
+
+El juego está disponible directamente desde el navegador, sin necesidad de instalación.
+
+> **🚧 Versión en desarrollo:** actualmente puedes explorar la habitación de Amanda, interactuar con objetos, mantener conversaciones y tomar decisiones. Los cinco capítulos todavía están en desarrollo.
+
+---
+
+## 🇮🇹 Bienvenida a Salerno, Amanda
 
 Amanda tiene 22 años, estudia Física y se ha ido de Erasmus a Salerno. Su plan era sencillo: descubrir Italia, conocer gente, viajar por Europa y, con suerte, aprobar alguna asignatura.
 
 El universo tenía otros planes.
 
-Entre trámites interminables, clases inesperadas, noches que iban a ser «tranquilas» y viajes organizados con una confianza preocupante, Amy tendrá que tomar decisiones y afrontar sus consecuencias. Algunas se olvidarán pronto. Otras volverán cuando menos lo espere.
+Entre trámites interminables, clases inesperadas, noches que iban a ser «tranquilas» y viajes organizados con una confianza preocupante, Amanda tendrá que tomar decisiones y afrontar sus consecuencias. Algunas se olvidarán pronto. Otras volverán cuando menos lo espere.
 
 **Tu misión: llegar viva —mentalmente hablando— a Navidad.**
 
@@ -24,7 +30,7 @@ Entre trámites interminables, clases inesperadas, noches que iban a ser «tranq
 
 Una aventura de exploración en **pixel art 2D**, vista desde arriba, con diálogos, personajes, pequeñas pruebas y decisiones que modifican lo que ocurre.
 
-Podrás explorar habitaciones, calles, universidades y aeropuertos; hablar con los amigos de Amy; encontrar pistas; resolver situaciones absurdas y elegir cómo responder cuando los planes se compliquen.
+Podrás explorar habitaciones, calles, universidades y aeropuertos; hablar con los amigos de Amanda; encontrar pistas; resolver situaciones absurdas y elegir cómo responder cuando los planes se compliquen.
 
 No necesitas experiencia jugando. Basta con tener algo de paciencia con la burocracia universitaria.
 
@@ -48,7 +54,7 @@ En **Eurotrip** podrás escoger una de tres aventuras diferentes. Para descubrir
 
 ## 🧠 Salud mental Erasmus
 
-Amy comienza con **100 puntos de salud mental**. Los errores y contratiempos la reducen; descansar, superar pruebas y disfrutar con los amigos ayuda a recuperarla.
+Amanda comienza con **100 puntos de salud mental**. Los errores y contratiempos la reducen; descansar, superar pruebas y disfrutar con los amigos ayuda a recuperarla.
 
 Si llega a cero, aparece el temido:
 
@@ -58,24 +64,27 @@ Si llega a cero, aparece el temido:
 
 Por suerte, podrás reintentarlo desde un punto de control. Bastante castigo es ya estudiar Física.
 
-## 🕹️ Controles previstos
+## 🕹️ Controles
 
 | Acción | Ordenador |
 | --- | --- |
-| Mover a Amy | WASD o flechas |
+| Mover a Amanda | WASD o flechas |
 | Interactuar | E o espacio |
 | Continuar diálogos | E, espacio o clic |
-| Pausa | Escape |
+| Seleccionar respuestas | Teclas numéricas o clic |
+| Volver al menú | Botón «Volver al menú» |
 
-Se prevé incorporar controles táctiles para móvil y tablet en horizontal. **El proyecto está en desarrollo**, así que la compatibilidad y algunos detalles pueden cambiar durante las pruebas.
+Se prevé incorporar controles táctiles para móvil y tablet en horizontal. **Actualmente se recomienda jugar desde un ordenador con teclado.**
+
+El proyecto está en desarrollo, así que la compatibilidad y algunos controles pueden cambiar durante las pruebas.
 
 ## 🛠️ Sobre el proyecto
 
-Este juego está siendo desarrollado como un proyecto personal, poco a poco, con **HTML, CSS y JavaScript**, y posiblemente **Phaser 3** para facilitar el movimiento y los escenarios.
+Este juego está siendo desarrollado como un proyecto personal, poco a poco, con **HTML, CSS, JavaScript y Phaser 3** para gestionar el movimiento, las interacciones y los escenarios.
 
 La prioridad es hacer algo **jugable, divertido y personalizado**, no construir un videojuego enorme. No necesita servidor ni cuentas; la versión final se podrá jugar desde el navegador.
 
-El desarrollo será incremental: primero una habitación con Amy, después interacciones y decisiones, luego el primer capítulo completo y, a partir de ahí, el resto de la aventura.
+El desarrollo será incremental: primero una habitación con AmAmanday, después interacciones y decisiones, luego el primer capítulo completo y, a partir de ahí, el resto de la aventura.
 
 Para consultar la historia, las mecánicas y el plan de implementación, ver **[GAME_DESIGN.md](GAME_DESIGN.md)**.
 
@@ -83,7 +92,7 @@ Para consultar la historia, las mecánicas y el plan de implementación, ver **[
 
 - [x] Historia y estructura de los cinco capítulos.
 - [x] Diseño de las decisiones y las rutas alternativas.
-- [ ] Prototipo jugable.
+- [x] Prototipo jugable.
 - [ ] Cinco capítulos implementados.
 - [ ] Pruebas, personalización y publicación.
 
