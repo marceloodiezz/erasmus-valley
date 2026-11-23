@@ -34,6 +34,28 @@ const mainMenu = document.getElementById("main-menu");
 const newGameButton = document.getElementById("new-game");
 const continueGameButton = document.getElementById("continue-game");
 const backMenuButton = document.getElementById("back-menu");
+const touchControlsElement = document.getElementById("touch-controls");
+
+const touchControls = new TouchControls((x, y) => {
+    const roomScene = game.scene.getScene("RoomScene");
+
+    // Enviar movimiento solo durante una partida activa.
+    if (!roomScene.scene.isActive() || !roomScene.player) {
+        return;
+    }
+
+    // No permitir movimiento durante los diálogos.
+    if (roomScene.dialog?.isOpen()) {
+        return;
+    }
+
+    roomScene.player.setTouchDirection(x, y);
+});
+
+// Las escenas pueden avisar cuando comienza una interacción.
+game.events.on("interaction-open", () => {
+    touchControls.reset();
+});
 
 // Actualizar el botón Continuar.
 function refreshContinueButton() {
@@ -55,6 +77,9 @@ newGameButton.addEventListener("click", () => {
 
     mainMenu.classList.add("hidden");
     backMenuButton.classList.remove("hidden");
+
+    touchControls.reset();
+    touchControlsElement.classList.remove("hidden");
 
     const roomScene = game.scene.getScene("RoomScene");
 
@@ -81,6 +106,9 @@ continueGameButton.addEventListener("click", () => {
     mainMenu.classList.add("hidden");
     backMenuButton.classList.remove("hidden");
 
+    touchControls.reset();
+    touchControlsElement.classList.remove("hidden");
+
     const roomScene = game.scene.getScene("RoomScene");
 
     // Reiniciar recuperando el progreso.
@@ -103,6 +131,9 @@ backMenuButton.addEventListener("click", () => {
 
     // Pausar el juego.
     roomScene.scene.pause();
+
+    touchControls.reset();
+    touchControlsElement.classList.add("hidden");
 
     mainMenu.classList.remove("hidden");
     backMenuButton.classList.add("hidden");

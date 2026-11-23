@@ -32,10 +32,11 @@ body {
 }
 
 /* Móviles y tablets en vertical */
-@media (orientation: portrait) and (pointer: coarse) {
+
+@media (orientation: portrait) and (any-pointer: coarse) {
 
     #game-container {
-        display: none;
+        visibility: hidden;
     }
 
     #rotate-message {
@@ -59,7 +60,6 @@ body {
         margin-bottom: 8px;
     }
 }
-
 
 /* MENÚ PRINCIPAL */
 
@@ -268,6 +268,49 @@ body {
     background: #f4d79d;
 }
 
+/* ETIQUETAS DE INTERACCIÓN */
+
+#interaction-panel {
+    position: fixed;
+    z-index: 3;
+
+    transform: translate(-50%, -100%);
+    pointer-events: none;
+}
+
+#interaction-action {
+    display: block;
+    padding: 5px 10px;
+
+    background: rgba(246, 233, 201, 0.92);
+    border: 1px solid #745635;
+    border-radius: 5px;
+
+    color: #49321e;
+    font-family: inherit;
+    font-size: 12px;
+    font-weight: bold;
+    white-space: nowrap;
+
+    cursor: pointer;
+    pointer-events: auto;
+}
+
+#interaction-action:hover {
+    background: #f6e9c9;
+}
+
+.interaction-key {
+    display: inline-block;
+    margin-left: 6px;
+    padding: 2px 5px;
+
+    background: #e5bd79;
+    border-radius: 3px;
+
+    font-size: 10px;
+}
+
 /* DIÁLOGOS EN PANTALLAS PEQUEÑAS */
 
 @media (max-height: 450px) {
@@ -315,7 +358,7 @@ body {
 
     color: #49321e;
     font-family: inherit;
-    font-size: 14px;
+    font-size: 16px;
     text-align: left;
     line-height: 1.4;
 
@@ -340,6 +383,68 @@ body {
 
     .dialog-choice {
         padding: 7px 10px;
-        font-size: 12px;
+        font-size: 13px;
+    }
+}
+
+/* JOYSTICK TÁCTIL */
+
+#touch-controls {
+    display: none;
+    position: fixed;
+    left: max(16px, env(safe-area-inset-left));
+    bottom: max(16px, env(safe-area-inset-bottom));
+    z-index: 3;
+}
+
+#joystick-base {
+    position: relative;
+    width: 110px;
+    height: 110px;
+
+    border: 3px solid #745635;
+    border-radius: 50%;
+    background: rgba(245, 231, 178, 0.4);
+
+    touch-action: none;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+#joystick-thumb {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+
+    width: 48px;
+    height: 48px;
+
+    border: 3px solid #745635;
+    border-radius: 50%;
+    background: #e5bd79;
+
+    transform: translate(-50%, -50%);
+    pointer-events: none;
+}
+
+/* Mostrar el joystick en dispositivos con pantalla táctil */
+
+@media (any-pointer: coarse) and (orientation: landscape) {
+    #touch-controls:not(.hidden) {
+        display: block;
+    }
+}
+
+/* Móviles horizontales de poca altura */
+
+@media (any-pointer: coarse) and (orientation: landscape) and (max-height: 450px) {
+    #joystick-base {
+        width: 90px;
+        height: 90px;
+    }
+
+    #joystick-thumb {
+        width: 40px;
+        height: 40px;
     }
 }

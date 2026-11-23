@@ -29,7 +29,7 @@
                 </button>
 
                 <button id="continue-game" class="game-button" disabled>
-                    Continuar
+                    Continuar partida
                 </button>
             </nav>
 
@@ -42,6 +42,18 @@
     <button id="back-menu" class="game-button hidden">
         Volver al menú
     </button>
+
+    <!-- Controles táctiles -->
+    <div id="touch-controls" class="hidden">
+        <div id="joystick-base">
+            <div id="joystick-thumb"></div>
+        </div>
+    </div>
+
+    <!-- Interacción con objetos -->
+    <div id="interaction-panel" class="hidden">
+        <button id="interaction-action" type="button"></button>
+    </div>
 
     <!-- Cuadro de diálogo -->
     <div id="dialog-overlay" class="hidden">
@@ -73,9 +85,16 @@
     <!-- Sistemas -->
     <script src="js/systems/DialogManager.js"></script>
     <script src="js/systems/SaveManager.js"></script>
+    <script src="js/systems/InteractionManager.js"></script>
+
+    <!-- Datos -->
+    <script src="js/data/roomInteractions.js"></script>
 
     <!-- Escenarios -->
     <script src="js/scenes/RoomScene.js"></script>
+
+    <!-- Controles táctiles -->
+    <script src="js/systems/TouchControls.js"></script>
 
     <!-- Configuración principal -->
     <script src="js/main.js"></script>

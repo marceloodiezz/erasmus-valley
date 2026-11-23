@@ -96,3 +96,22 @@ Para consultar la historia, las mecánicas y el plan de implementación, ver **[
 - [ ] Cinco capítulos implementados.
 - [ ] Pruebas, personalización y publicación.
 
+---
+
+## Ejecución en local
+
+Para probar el videojuego sin desplegarlo en GitHub Pages, abre una terminal en la raíz del proyecto y ejecuta:
+
+```bash
+python3 -m http.server 8000
+```
+
+Después, abre en el navegador:
+
+http://localhost:8000
+
+Para probarlo desde un móvil conectado a la misma red Wi-Fi, utiliza la IP local del ordenador:
+
+http://IP_DEL_ORDENADOR:8000
+
+Para detener el servidor, pulsa `Ctrl + C` en la terminal.

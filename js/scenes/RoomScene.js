@@ -82,28 +82,19 @@ class RoomScene extends Phaser.Scene {
             ...(this.startData.saveData?.decisions ?? {})
         };
 
-        // Sistema de interacciones.
-        this.createInteractions();
-        this.setupInteractionUI();
-
-        // Indicador de interacción sobre los objetos.
-        this.interactionBackground = this.add.graphics();
-        this.interactionBackground
-            .setDepth(99)
-            .setVisible(false);
-
-        // Texto del indicador.
-        this.interactionLabel = this.add.text(0, 0, "", {
-            fontFamily: "Arial",
-            fontSize: "14px",
-            fontStyle: "bold",
-            color: "#49321e"
+        // Sistema de diálogos.
+        this.dialog = new DialogManager((id, value) => {
+            this.decisions[id] = value;
+            this.saveProgress();
         });
 
-        this.interactionLabel
-            .setOrigin(0.5, 0.5)
-            .setDepth(100)
-            .setVisible(false);
+        // Sistema de interacciones.
+        this.interactionManager = new InteractionManager(
+            this,
+            this.player,
+            roomInteractions,
+            this.dialog
+        );
 
         // Gestionar pausa.
         this.events.on("pause", this.handlePause, this);
@@ -130,12 +121,12 @@ class RoomScene extends Phaser.Scene {
             this.scale.off("resize", this.resizeCamera, this);
             this.events.off("pause", this.handlePause, this);
 
-            window.removeEventListener("pagehide", this.handlePageHide);
-            window.removeEventListener("keydown", this.handleInteractionKey, true);
+            window.removeEventListener(
+                "pagehide",
+                this.handlePageHide
+            );
 
-            this.interactionLabel.setVisible(false);
-            this.interactionBackground.setVisible(false);
-
+            this.interactionManager.destroy();
             this.dialog.destroy();
         });
 
@@ -178,295 +169,9 @@ class RoomScene extends Phaser.Scene {
         return zone;
     }
 
-    // =====================================
-    // OBJETOS INTERACTIVOS
-    // =====================================
-
-    createInteractions() {
-        this.interactionRadius = 90;
-
-        // Coordenadas de acceso a cada objeto.
-        this.interactions = [
-            {
-                id: "bookshelf",
-                name: "Estantería",
-                x: 165, y: 380,
-                promptX: 110, promptY: 300,
-                action: "Examinar",
-                speaker: "Marcelo",
-                text: "Una colección de libros de Física. Algunos incluso parecen haber sido abiertos."
-            },
-            {
-                id: "bed",
-                name: "Cama",
-                x: 210, y: 260,
-                promptX: 210, promptY: 115,
-                action: "Examinar",
-                speaker: "Marcelo",
-                text: "La cama de Amanda. Probablemente lo que más va a echar de menos cuando empiece el Erasmus."
-            },
-            {
-                id: "desk",
-                name: "Portátil",
-                x: 680, y: 220,
-                promptX: 680, promptY: 110,
-                action: "Examinar",
-
-                lines: [
-                    {
-                        speaker: "Marcelo",
-                        text: "Amy abre el portátil. Hay 37 pestañas abiertas."
-                    },
-                    {
-                        speaker: "Amanda",
-                        text: "Vale, tengo que preparar el Learning Agreement antes de irme."
-                    },
-                    {
-                        speaker: "Amanda",
-                        text: "¿Qué hago primero?",
-                        decisionId: "learning_agreement",
-                        choices: [
-                            {
-                                id: "responsable",
-                                text: "Organizarme y revisar las asignaturas.",
-                                speaker: "Marcelo",
-                                response: "Amanda abre una hoja de cálculo y empieza a comparar asignaturas. Esto promete ser una tarde larga."
-                            },
-                            {
-                                id: "improvisar",
-                                text: "Mirar primero los vuelos a Italia.",
-                                speaker: "Marcelo",
-                                response: "Amanda termina viendo fotos de la costa amalfitana. Las convalidaciones pueden esperar un poquito."
-                            }
-                        ]
-                    },
-                    {
-                        speaker: "Amanda",
-                        text: "Sea como sea, esto del Erasmus va a dar mucho trabajo."
-                    }
-                ]
-            },
-            {
-                id: "wardrobe",
-                name: "Armario",
-                x: 805, y: 450,
-                promptX: 805, promptY: 250,
-                action: "Examinar",
-                speaker: "Amanda",
-                text: "¿De verdad tengo que decidir qué ropa llevarme para tantos meses?"
-            },
-            {
-                id: "suitcase",
-                name: "Maleta",
-                x: 690, y: 510,
-                promptX: 690, promptY: 410,
-                action: "Examinar",
-                speaker: "Marcelo",
-                text: "Una maleta vacía. En unas horas intentará contener toda una vida. Y probablemente un secador."
-            },
-            {
-                id: "door",
-                name: "Puerta",
-                x: 480, y: 480,
-                promptX: 480, promptY: 515,
-                action: "Abrir",
-                speaker: "Marcelo",
-                text: "¿Ya quieres marcharte? Todavía tienes algunas cosas pendientes antes de comenzar el Erasmus."
-            }
-        ];
-
-        this.nearbyInteraction = null;
-    }
-
-    // Buscar el objeto más adecuado para interactuar.
-    findNearbyInteraction() {
-        const playerPosition = this.player.sprite.body.center;
-
-        const facingVectors = {
-            up: { x: 0, y: -1 },
-            down: { x: 0, y: 1 },
-            left: { x: -1, y: 0 },
-            right: { x: 1, y: 0 }
-        };
-
-        const facing = facingVectors[this.player.facing];
-
-        let closest = null;
-        let closestDistance = Infinity;
-        let closestInFront = null;
-        let closestFrontDistance = Infinity;
-
-        for (const object of this.interactions) {
-            const dx = object.x - playerPosition.x;
-            const dy = object.y - playerPosition.y;
-
-            const distance = Math.hypot(dx, dy);
-
-            if (distance > this.interactionRadius) {
-                continue;
-            }
-
-            // Objeto más cercano.
-            if (distance < closestDistance) {
-                closest = object;
-                closestDistance = distance;
-            }
-
-            // Priorizar objetos situados delante de Amanda.
-            const dot = dx * facing.x + dy * facing.y;
-
-            if (dot > 0 && distance < closestFrontDistance) {
-                closestInFront = object;
-                closestFrontDistance = distance;
-            }
-        }
-
-        return closestInFront || closest;
-    }
-
-    // =====================================
-    // INTERFAZ DE INTERACCIÓN
-    // =====================================
-
-    setupInteractionUI() {
-        this.dialog = new DialogManager((id, value) => {
-            this.decisions[id] = value;
-            this.saveProgress();
-        });
-
-        this.handleInteractionKey = (event) => {
-            if (!this.scene.isActive()) return;
-
-            const menu = document.getElementById("main-menu");
-
-            if (!menu.classList.contains("hidden")) {
-                return;
-            }
-
-            // Seleccionar respuestas con las teclas 1, 2, 3...
-            if (this.dialog.isOpen() && this.dialog.hasChoices()) {
-                const match = event.code.match(/^(Digit|Numpad)([1-9])$/);
-
-                if (match) {
-                    event.preventDefault();
-
-                    if (!event.repeat) {
-                        this.dialog.choose(Number(match[2]) - 1);
-                    }
-
-                    return;
-                }
-            }
-
-            // Teclas para avanzar o interactuar.
-            if (
-                event.code !== "KeyE" &&
-                event.code !== "Space"
-            ) {
-                return;
-            }
-
-            event.preventDefault();
-
-            if (event.repeat) return;
-
-            if (this.dialog.isOpen()) {
-                this.dialog.next();
-            } else if (this.nearbyInteraction) {
-                this.openDialog(this.nearbyInteraction);
-            }
-        };
-
-        window.addEventListener(
-            "keydown",
-            this.handleInteractionKey,
-            true
-        );
-    }
-
-    updateNearbyInteraction() {
-        const interaction = this.findNearbyInteraction();
-
-        if (interaction === this.nearbyInteraction) {
-            return;
-        }
-
-        this.nearbyInteraction = interaction;
-
-        if (!interaction) {
-            this.interactionLabel.setVisible(false);
-            this.interactionBackground.setVisible(false);
-            return;
-        }
-
-        const text = "E · " + interaction.action + " " + interaction.name;
-
-        this.interactionLabel.setText(text);
-
-        const x = interaction.promptX;
-        const y = interaction.promptY - 15;
-
-        const paddingX = 12;
-        const paddingY = 7;
-
-        const width = this.interactionLabel.width + paddingX * 2;
-        const height = this.interactionLabel.height + paddingY * 2;
-
-        this.interactionBackground.clear();
-
-        // Borde marrón.
-        this.interactionBackground.fillStyle(0x745635);
-        this.interactionBackground.fillRoundedRect(
-            x - width / 2 - 3,
-            y - height / 2 - 3,
-            width + 6,
-            height + 6,
-            7
-        );
-
-        // Fondo crema.
-        this.interactionBackground.fillStyle(0xf5e7b2);
-        this.interactionBackground.fillRoundedRect(
-            x - width / 2,
-            y - height / 2,
-            width,
-            height,
-            5
-        );
-
-        this.interactionLabel.setPosition(x, y);
-
-        this.interactionBackground.setVisible(true);
-        this.interactionLabel.setVisible(true);
-    }
-
-    openDialog(interaction) {
-        // Detener a Amanda.
-        this.player.resetArrows();
-
-        // Ocultar el indicador de interacción.
-        this.interactionLabel.setVisible(false);
-        this.interactionBackground.setVisible(false);
-
-        // Forzar que el indicador se actualice al cerrar.
-        this.nearbyInteraction = null;
-
-        // Mostrar la conversación.
-        this.dialog.open(interaction);
-    }
-
-    hideInteractionUI() {
-        this.nearbyInteraction = null;
-
-        this.interactionLabel.setVisible(false);
-        this.interactionBackground.setVisible(false);
-
-        this.dialog.close();
-    }
-
     handlePause() {
-        this.player.resetArrows();
-        this.hideInteractionUI();
+        this.player.resetMovement();
+        this.interactionManager.reset();
     }
 
     // =====================================
@@ -517,13 +222,12 @@ class RoomScene extends Phaser.Scene {
     // =====================================
 
     update() {
-        // Durante un diálogo Amanda permanece quieta.
         if (this.dialog.isOpen()) {
             this.player.sprite.setVelocity(0, 0);
             return;
         }
 
         this.player.update();
-        this.updateNearbyInteraction();
+        this.interactionManager.update();
     }
 }

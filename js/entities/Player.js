@@ -5,6 +5,7 @@ class Player {
         this.speed = 175;
         this.facing = "down";
         this.wasMoving = false;
+        this.touchDirection = { x: 0, y: 0 };
 
         // Crear el personaje.
         this.sprite = scene.physics.add.sprite(x, y, "amy-down", 0);
@@ -61,10 +62,12 @@ class Player {
             }
         };
 
-        this.resetArrows = () => {
+        this.resetMovement = () => {
             for (const direction in this.arrows) {
                 this.arrows[direction] = false;
             }
+
+            this.setTouchDirection(0, 0);
 
             this.sprite.setVelocity(0, 0);
             this.sprite.anims.stop();
@@ -74,12 +77,12 @@ class Player {
 
         window.addEventListener("keydown", this.handleKeyDown, true);
         window.addEventListener("keyup", this.handleKeyUp, true);
-        window.addEventListener("blur", this.resetArrows);
+        window.addEventListener("blur", this.resetMovement);
 
         scene.events.once("shutdown", () => {
             window.removeEventListener("keydown", this.handleKeyDown, true);
             window.removeEventListener("keyup", this.handleKeyUp, true);
-            window.removeEventListener("blur", this.resetArrows);
+            window.removeEventListener("blur", this.resetMovement);
         });
     }
 
@@ -106,12 +109,12 @@ class Player {
         }
     }
 
-    update() {
-        if (this.scene.dialogOpen) {
-            this.sprite.setVelocity(0, 0);
-            return;
-        }
+    setTouchDirection(x, y) {
+        this.touchDirection.x = x;
+        this.touchDirection.y = y;
+    }
 
+    update() {
         let x = 0;
         let y = 0;
 
@@ -127,6 +130,12 @@ class Player {
             y = -1;
         } else if (this.arrows.down || this.keys.down.isDown) {
             y = 1;
+        }
+
+        // El joystick tiene prioridad cuando está en uso.
+        if (this.touchDirection.x !== 0 || this.touchDirection.y !== 0) {
+            x = this.touchDirection.x;
+            y = this.touchDirection.y;
         }
 
         const direction = new Phaser.Math.Vector2(x, y);
